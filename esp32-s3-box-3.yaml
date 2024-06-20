@@ -95,7 +95,7 @@ logger:
   hardware_uart: USB_SERIAL_JTAG
 
 dashboard_import:
-  package_import_url: github://esphome/firmware/wake-word-voice-assistant/esp32-s3-box-3.yaml@main
+  package_import_url: github://Rep-Hueman/ESPHome/esp32-s3-box-3.yaml@main
 
 wifi:
   ssid: !secret wifi_ssid
