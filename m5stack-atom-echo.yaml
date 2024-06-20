@@ -1,5 +1,5 @@
 substitutions:
-  m5stack_software_version: "2.0-b1"
+  m5stack_software_version: "2.0-b2"
   m5stack_hardware_version: "V2-Complete"
 
 esphome:
