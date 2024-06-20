@@ -9,7 +9,7 @@ substitutions:
   replying_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/replying_320_240.png
   error_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/error_320_240.png
 
-  esp32_s3_software_version: "2.0-b1"
+  esp32_s3_software_version: "2.0-b2"
   esp32_s3_hardware_version: "V2-Complete"
 
   loading_illustration_background_color: "000000"
