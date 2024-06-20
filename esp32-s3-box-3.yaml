@@ -1,4 +1,22 @@
----
+#------------------------------------------------------------------------------------#
+#     PIN Schematics                                                                 #
+#                                                                                    #
+#       GPIO-00 MCU-BOOT                                                             #
+#       GPIO-01 Speaker Mute-Status                                                  #
+#       GPIO-02 I2S MCLK                                                             #
+#       GPIO-03 Touch-Screen TT21100 Interrupt Pin                                   #
+#       GPIO-04 ILI92xxx Display DC-Pin (SPI: CLK-Pin)                               #
+#       GPIO-05 ILI92xxx Display CS-Pin (SPI: MOSI-Pin)                              #
+#       GPIO-06 ILI92xxx Display SDA                                                 #
+#       GPIO-07 ILI92xxx Display SCK                                                 #
+#       GPIO-17 I2S_SCLK                                                             #
+#       GPIO-40 I2C_SCL (Temp & Hum) -- SENSOR v1.1 [AHT30]                          #
+#       GPIO-41 I2C_SDA (Temp & Hum) -- SENSOR v1.1 [AHT30]                          #
+#       GPIO-45 I2S_LRCK
+#       GPIO-46 PA_CTRL
+#       GPIO-47 LCD Backlight (CTRL)
+#       GPIO-48 LCD Reset-Pin
+
 substitutions:
   name: esp32-s3-box-3
   friendly_name: ESP32 S3 Box 3
