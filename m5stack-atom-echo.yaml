@@ -25,7 +25,7 @@ ota:
     password: !secret ota_esp32_secret
 
 dashboard_import:
-  package_import_url: github://esphome/firmware/voice-assistant/m5stack-atom-echo.yaml@main
+  package_import_url: github://Rep-Hueman/ESPHome/m5stack-atom-echo.yaml@main
 
 wifi:
   ssid: !secret wifi_ssid
