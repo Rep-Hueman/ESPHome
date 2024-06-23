@@ -29,6 +29,7 @@ substitutions:
 
   esp32_s3_software_version: "2.0-b1-sound-ha"
   esp32_s3_hardware_version: "V2"
+  wifi_update_interval: 15s
 
   loading_illustration_background_color: "000000"
   idle_illustration_background_color: "000000"
