@@ -20,16 +20,15 @@
 substitutions:
   name: esp32-s3-box-3
   friendly_name: ESP32 S3 Box 3
-  loading_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/loading_320_240.png
-  idle_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/idle_320_240.png
-  listening_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/listening_320_240.png
-  thinking_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/thinking_320_240.png
-  replying_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/replying_320_240.png
-  error_illustration_file: https://github.com/esphome/firmware/raw/main/voice-assistant/casita/error_320_240.png
-
-  esp32_s3_software_version: "2.0-b1-sound-ha"
+  loading_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/loading_320_240.png
+  idle_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/idle_320_240_RepMan.png
+  listening_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/listening_320_240.png
+  thinking_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/thinking_320_240.png
+  replying_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/replying_320_240.png
+  error_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/error_320_240.png
+  
+  esp32_s3_software_version: "2.0-b3-sound-ha"
   esp32_s3_hardware_version: "V2"
-  wifi_update_interval: 15s
 
   loading_illustration_background_color: "000000"
   idle_illustration_background_color: "000000"
@@ -483,12 +482,12 @@ image:
     resize: 320x240
     type: RGB24
     use_transparency: true
-  - file: https://github.com/esphome/firmware/raw/main/voice-assistant/error_box_illustrations/error-no-wifi.png
+  - file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/error-no-wifi.png
     id: error_no_wifi
     resize: 320x240
     type: RGB24
     use_transparency: true
-  - file: https://github.com/esphome/firmware/raw/main/voice-assistant/error_box_illustrations/error-no-ha.png
+  - file: https://github.com/Rep-Hueman/ESPHome/raw/main/casita/error-no-ha.png
     id: error_no_ha
     resize: 320x240
     type: RGB24
@@ -515,27 +514,7 @@ sensor:
   - platform: uptime
     name: Uptime
     id: uptime_sensor
-    entity_category: "diagnostic"
-    update_interval: $wifi_update_interval
-    on_raw_value:
-      then:
-        - text_sensor.template.publish:
-            id: uptime_human
-            state: !lambda |-
-              int seconds = round(id(uptime_sensor).raw_state);
-              int days = seconds / (24 * 3600);
-              seconds = seconds % (24 * 3600);
-              int hours = seconds / 3600;
-              seconds = seconds % 3600;
-              int minutes = seconds /  60;
-              seconds = seconds % 60;
-              return (
-                (days ? to_string(days) + "d " : "") +
-                (hours ? to_string(hours) + "h " : "") +
-                (minutes ? to_string(minutes) + "m " : "") +
-                (to_string(seconds) + "s")
-              ).c_str(); 
-
+ 
 text_sensor:
   # WiFi info
   - platform: wifi_info
@@ -548,12 +527,6 @@ text_sensor:
       name: "Connected BSSID"
     mac_address:
       name: Mac Wifi Address
-      entity_category: "diagnostic"
-  # Device Uptime Information 
-  - platform: template
-    name: Uptime Human Readable
-    id: uptime_human
-    icon: mdi:clock-start      
   # ESPHome information
   - platform: version
     id: text_sensor_version
