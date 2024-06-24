@@ -28,7 +28,7 @@ substitutions:
   error_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/error_V3.png
   mute_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/mute_V3.png
   
-  esp32_s3_software_version: "2.0-b6-sound-ha"
+  esp32_s3_software_version: "2.0-b8-sound-ha"
   esp32_s3_hardware_version: "V2"
 
   loading_illustration_background_color: "000000"
@@ -138,7 +138,7 @@ button:
     id: factory_reset_btn
     name: Factory reset
   - platform: restart
-    name: "Restart esp32-s3"
+    name: "Restart"
 
 binary_sensor:
   - platform: gpio
@@ -295,6 +295,7 @@ voice_assistant:
               not:
                 voice_assistant.is_running:
           - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
+    - delay: 5s
     - script.execute: draw_display
   on_error:
     - if:
@@ -332,10 +333,8 @@ voice_assistant:
                 - micro_wake_word.start
                 - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
         else:
-          - lambda: id(va).set_use_wake_word(false);
-          - voice_assistant.stop
-          - micro_wake_word.stop
           - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
+          - lambda: id(va).set_use_wake_word(false);
     - lambda: id(init_in_progress) = false;
     - script.execute: draw_display
   on_client_disconnected:
