@@ -28,7 +28,7 @@ substitutions:
   error_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/error_V3.png
   mute_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/mute_V3.png
   
-  esp32_s3_software_version: "2.0-b5-sound-ha"
+  esp32_s3_software_version: "2.0-b6-sound-ha"
   esp32_s3_hardware_version: "V2"
 
   loading_illustration_background_color: "000000"
@@ -114,7 +114,7 @@ logger:
   hardware_uart: USB_SERIAL_JTAG
 
 dashboard_import:
-  package_import_url: github://Rep-Hueman/ESPHome/esp32-s3-box-3.yaml@main
+  package_import_url: github://Rep-Hueman/ESPHome/esp32-s3-box3-ext-audio-touch.yml@main
 
 wifi:
   ssid: !secret wifi_ssid
@@ -260,11 +260,11 @@ voice_assistant:
         state: !lambda return x;
     - script.execute: draw_display
   on_tts_start:
-    - lambda: id(voice_assistant_phase) = ${voice_assist_replying_phase_id};
-    - script.execute: draw_display
     - text_sensor.template.publish:
         id: text_response
         state: !lambda return x;
+    - lambda: id(voice_assistant_phase) = ${voice_assist_replying_phase_id};
+    - script.execute: draw_display
   on_tts_end:
     - homeassistant.service:
         service: media_player.play_media
@@ -272,14 +272,6 @@ voice_assistant:
           entity_id: media_player.home_350
           media_content_id: !lambda 'return x;'
           media_content_type: url
-    - if:
-        condition:
-          switch.is_off: mute
-        then:
-          - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
-        else:
-          - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
-    - script.execute: draw_display
 #   on_tts_stream_start:
 #     - lambda: id(voice_assistant_phase) = ${voice_assist_replying_phase_id};
 #     - script.execute: draw_display
@@ -296,7 +288,14 @@ voice_assistant:
           - wait_until:
               not:
                 voice_assistant.is_running:
+          - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
           - micro_wake_word.start:
+        else:
+          - wait_until:
+              not:
+                voice_assistant.is_running:
+          - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
+    - script.execute: draw_display
   on_error:
     - if:
         condition:
@@ -331,8 +330,11 @@ voice_assistant:
                 lambda: return id(wake_word_engine_location).state == "On device";
               then:
                 - micro_wake_word.start
-          - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
+                - lambda: id(voice_assistant_phase) = ${voice_assist_idle_phase_id};
         else:
+          - lambda: id(va).set_use_wake_word(false);
+          - voice_assistant.stop
+          - micro_wake_word.stop
           - lambda: id(voice_assistant_phase) = ${voice_assist_muted_phase_id};
     - lambda: id(init_in_progress) = false;
     - script.execute: draw_display
