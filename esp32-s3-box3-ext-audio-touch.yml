@@ -28,8 +28,7 @@ substitutions:
   error_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/error_V3.png
   mute_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/mute_V3.png
   
-  esp32_s3_software_version: "2.0-b9-sound-ha"
-  esp32_s3_hardware_version: "V2"
+  esp32_s3_software_version: "2.0-b11-sound-ha"
 
   loading_illustration_background_color: "000000"
   idle_illustration_background_color: "000000"
@@ -59,7 +58,7 @@ esphome:
   platformio_options:
     board_build.flash_mode: dio
   project:
-    name: esphome.voice-assistant
+    name: repman.voice-assistant
     version: "2.0"
   on_boot:
     priority: 600
@@ -170,12 +169,44 @@ binary_sensor:
     disabled_by_default: true
     entity_category: diagnostic
     id: home_button
-    on_click:
-      - if:
-          condition:
-            switch.is_on: mute
-          then:
-            - voice_assistant.start
+    on_multi_click:
+      - timing:
+          - ON for at least 50ms
+          - OFF for at least 50ms
+        then:
+          - if:
+              condition:
+                switch.is_on: mute
+              then:
+                - if:
+                    condition: voice_assistant.is_running
+                    then:
+                      - voice_assistant.stop:
+                    else:
+                      - voice_assistant.start:
+              else:
+                  - if:
+                      condition:
+                        lambda: return !id(init_in_progress);
+                      then:
+                        - if:
+                            condition:
+                              lambda: return id(wake_word_engine_location).state == "In Home Assistant";
+                            then:
+                              - voice_assistant.stop
+                              - delay: 1s
+                              - voice_assistant.start_continuous
+                        - if:
+                            condition:
+                              lambda: return id(wake_word_engine_location).state == "On device";
+                            then:
+                              - micro_wake_word.stop
+                              - delay: 500ms
+                              - voice_assistant.start:
+                              - wait_until:
+                                  not:
+                                    voice_assistant.is_running:
+                              - micro_wake_word.start:
 
 output:
   - platform: ledc
@@ -253,8 +284,6 @@ voice_assistant:
         id: text_response
         state: "..."
     - script.execute: draw_display
-    - homeassistant.service:
-        service: script.clear_play_350
   on_stt_vad_end:
     - lambda: id(voice_assistant_phase) = ${voice_assist_thinking_phase_id};
     - script.execute: draw_display
@@ -273,9 +302,15 @@ voice_assistant:
     - homeassistant.service:
         service: media_player.play_media
         data:
-          entity_id: media_player.home_350
+          entity_id: media_player.sonos_e01
           media_content_id: !lambda 'return x;'
-          media_content_type: url
+          media_content_type: music
+          announce: "true"
+    - homeassistant.service:
+        service: media_player.volume_set
+        data:
+          volume_level: "0.55"
+          entity_id: media_player.sonos_e01
 #   on_tts_stream_start:
 #     - lambda: id(voice_assistant_phase) = ${voice_assist_replying_phase_id};
 #     - script.execute: draw_display
