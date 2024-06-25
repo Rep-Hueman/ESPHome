@@ -28,7 +28,7 @@ substitutions:
   error_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/error_V3.png
   mute_illustration_file: https://github.com/Rep-Hueman/ESPHome/raw/main/images/s3box_ico_v3/mute_V3.png
   
-  esp32_s3_software_version: "2.0-b8-sound-ha"
+  esp32_s3_software_version: "2.0-b9-sound-ha"
   esp32_s3_hardware_version: "V2"
 
   loading_illustration_background_color: "000000"
@@ -171,7 +171,11 @@ binary_sensor:
     entity_category: diagnostic
     id: home_button
     on_click:
-      - voice_assistant.start:
+      - if:
+          condition:
+            switch.is_on: mute
+          then:
+            - voice_assistant.start
 
 output:
   - platform: ledc
@@ -343,7 +347,7 @@ voice_assistant:
           lambda: return id(wake_word_engine_location).state == "In Home Assistant";
         then:
           - lambda: id(va).set_use_wake_word(false);
-          - voice_assistant.stop:
+          - voice_assistant.stop
     - if:
         condition:
           lambda: return id(wake_word_engine_location).state == "On device";
@@ -419,7 +423,7 @@ switch:
     name: Mute
     id: mute
     optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
+    restore_mode: ALWAYS_OFF
     entity_category: config
     on_turn_off:
       - if:
