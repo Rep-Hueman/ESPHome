@@ -1,6 +1,8 @@
 # ESPHome
 
-esp32-s3-box3-ext-audio-touch.yml
+ESP32 S3 BOX 3:
+File: esp32-s3-box3-ext-audio-touch.yml
+
 - External sound
 - Use touch screens (red Home button) for switching on voice assistant
 - Mute only the microphone
