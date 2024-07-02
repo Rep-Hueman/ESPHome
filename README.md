@@ -2,11 +2,14 @@
 ESP32 S3 BOX 3
 ![ESP32 S3 BOX 3](https://github.com/Rep-Hueman/ESPHome/assets/28707705/e3750bf0-ef68-4a7c-8abd-02994cde36e9) 
 
-File: esp32-s3-box3-ext-audio-touch.yml
+File: esp32-s3-box-3-TSW.yaml
 
-- External sound
+- New sound drivers
+- Runs fast and stable
+- External or internal sound
 - Use touch screens (red Home button) for switching on voice assistant
-- Mute only the microphone
+- Mute only the microphone with touch
+- Disable wake word
 
 This configuration works but is still under development.
 
